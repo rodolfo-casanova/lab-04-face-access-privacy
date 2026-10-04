@@ -270,4 +270,3 @@ Caveats:
 
 ---
 
-**Author:** Rodolfo Casanova Aguilar · **Article:** _add your LinkedIn article link here_
