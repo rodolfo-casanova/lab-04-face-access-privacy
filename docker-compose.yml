@@ -1,0 +1,27 @@
+name: biometrics
+services:
+  bio-backend:
+    build: .
+    env_file: .env
+    command: uvicorn biometrics.backend:app --host 0.0.0.0 --port 8002
+    ports: ["8002:8002"]
+    volumes:
+      - ./results:/app/results
+  bio-device:
+    build: .
+    env_file: .env
+    command: uvicorn biometrics.device:app --host 0.0.0.0 --port 8001
+    ports: ["8001:8001"]
+    depends_on: [bio-backend]
+    volumes:
+      - ./cache:/app/cache
+  bio-eval:
+    build: .
+    profiles: ["jobs"]
+    env_file: .env
+    command: python -m biometrics.evaluate
+    depends_on: [bio-device, bio-backend]
+    volumes:
+      - ./results:/app/results
+      - ./cache:/app/cache
+      - ./data:/app/data
